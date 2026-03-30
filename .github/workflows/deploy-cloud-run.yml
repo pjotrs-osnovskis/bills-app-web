@@ -11,7 +11,6 @@ concurrency:
 
 jobs:
   deploy:
-    if: ${{ secrets.GCP_SA_KEY != '' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -19,15 +18,34 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check deploy credentials
+        id: precheck
+        shell: bash
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+        run: |
+          if [ -z "$GCP_SA_KEY" ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Authenticate to Google Cloud
+        if: steps.precheck.outputs.ready == 'true'
         uses: google-github-actions/auth@v3
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       - name: Deploy to Cloud Run
+        if: steps.precheck.outputs.ready == 'true'
         uses: google-github-actions/deploy-cloudrun@v3
         with:
           service: ${{ vars.CLOUD_RUN_SERVICE || 'bills-app-web' }}
           region: ${{ vars.GCP_REGION || 'europe-west1' }}
           source: .
           flags: --allow-unauthenticated
+
+      - name: Missing secret notice
+        if: steps.precheck.outputs.ready != 'true'
+        run: |
+          echo "Skipping deployment because GCP_SA_KEY is not configured."
