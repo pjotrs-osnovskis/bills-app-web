@@ -43,7 +43,7 @@ jobs:
           service: ${{ vars.CLOUD_RUN_SERVICE || 'bills-app-web' }}
           region: ${{ vars.GCP_REGION || 'europe-west1' }}
           source: .
-          flags: --allow-unauthenticated
+          flags: --allow-unauthenticated --min-instances=0 --max-instances=1 --cpu=1 --memory=512Mi
 
       - name: Missing secret notice
         if: steps.precheck.outputs.ready != 'true'
