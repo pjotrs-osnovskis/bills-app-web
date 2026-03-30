@@ -1,0 +1,47 @@
+{
+  "name": "bills-app-web",
+  "version": "1.0.0",
+  "description": "Latvian B2B invoice (rēķini) app — online version (Google auth, cloud storage)",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "node server.js",
+    "electron": "electron .",
+    "build:win": "node scripts/build-icon.mjs && set CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --win --config electron-builder.config.cjs"
+  },
+  "dependencies": {
+    "dotenv": "^17.3.1",
+    "express": "^4.21.0",
+    "express-session": "^1.19.0",
+    "firebase-admin": "^13.7.0",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.10.1",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "png-to-ico": "^3.0.1",
+    "rcedit": "^5.0.2",
+    "sharp": "^0.33.5"
+  },
+  "build": {
+    "appId": "lv.bills.app",
+    "productName": "Rēķinu lietotne",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "server.js",
+      "data-store.js",
+      "electron-main.js",
+      "public/**",
+      "node_modules/**"
+    ],
+    "win": {
+      "target": "nsis",
+      "signAndEditExecutable": false,
+      "icon": "build/icon.png"
+    }
+  }
+}

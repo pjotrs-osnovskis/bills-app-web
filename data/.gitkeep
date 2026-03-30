@@ -1,0 +1,1 @@
+User data (companies, customers, services, bills, settings) is stored here at runtime. Do not commit JSON files; this folder is kept empty in the repo.

@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qlynton — Design Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" rel="stylesheet">
+<style>
+/* ─── Reset & Root ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #111113;
+  --surface: #1c1c1e;
+  --surface-2: #242428;
+  --border: #2a2a2e;
+  --border-strong: #38383e;
+  --text: #f0f0f2;
+  --text-2: #a0a0ab;
+  --text-3: #606068;
+  --accent: #14b8a6;
+  --accent-hover: #0d9488;
+  --accent-dim: rgba(20,184,166,0.12);
+  --accent-dim2: rgba(20,184,166,0.06);
+  --grad: linear-gradient(135deg, #6366f1 0%, #8b5cf6 25%, #ec4899 50%, #f43f5e 75%, #f97316 100%);
+  --grad-dim: linear-gradient(135deg, rgba(99,102,241,0.18) 0%, rgba(139,92,246,0.18) 35%, rgba(236,72,153,0.18) 70%, rgba(244,63,94,0.18) 100%);
+  --danger: #ef4444;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --r-sm: 8px; --r-md: 12px; --r-lg: 16px; --r-xl: 20px;
+  --sh-sm: 0 1px 3px rgba(0,0,0,.3);
+  --sh-md: 0 4px 16px rgba(0,0,0,.35);
+  --sh-lg: 0 8px 32px rgba(0,0,0,.4);
+}
+
+body {
+  font-family: 'Outfit', -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Typography helpers ─────────────────────────────────────── */
+.t-muted { color: var(--text-2); }
+.t-subtle { color: var(--text-3); }
+.t-accent { color: var(--accent); }
+.t-danger { color: var(--danger); }
+.t-success { color: var(--success); }
+.fw-600 { font-weight: 600; }
+
+/* ─── Section labels ─────────────────────────────────────────── */
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  padding: 20px 0 6px;
+}
+
+/* ─── Dividers ───────────────────────────────────────────────── */
+hr { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+/* ─── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
+
+/* ─── Layout helpers ─────────────────────────────────────────── */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-4 { gap: 4px; }
+.gap-6 { gap: 6px; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; }
+.gap-24 { gap: 24px; }
+.flex-1 { flex: 1; }
+.w-full { width: 100%; }
+
+/* ─── Page wrapper ───────────────────────────────────────────── */
+.screen-label {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  padding: 32px 0 12px;
+}
+
+.screen-wrap {
+  max-width: 1300px;
+  margin: 0 auto 60px;
+  padding: 0 24px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  box-shadow: var(--sh-lg);
+  background: var(--bg);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════════════════════ */
+.header {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+}
+.header-bg {
+  position: absolute; inset: 0;
+  background: var(--grad);
+  background-size: 300% 300%;
+  animation: grad-shift 18s ease infinite;
+  opacity: .85;
+}
+@keyframes grad-shift {
+  0%,100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.header-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.42);
+  backdrop-filter: blur(16px);
+}
+.header-inner {
+  position: relative; z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  gap: 16px;
+}
+.header-left { display: flex; align-items: center; gap: 20px; }
+.logo {
+  font-size: 20px; font-weight: 700; color: #fff;
+  letter-spacing: -.03em; text-decoration: none;
+}
+.nav { display: flex; align-items: center; gap: 6px; }
+.nav-link {
+  font-size: 14px; font-weight: 500; color: rgba(255,255,255,.9);
+  text-decoration: none; padding: 8px 14px; border-radius: 10px;
+  border: 1px solid transparent; transition: all .2s;
+}
+.nav-link:hover { background: rgba(255,255,255,.1); }
+.nav-link.nav-cta {
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.18);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
+}
+.nav-link.nav-cta:hover { background: rgba(255,255,255,.2); }
+.header-right { display: flex; align-items: center; gap: 6px; }
+.nav-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  color: rgba(255,255,255,.85); border: 1px solid transparent;
+  cursor: pointer; transition: all .2s; background: none;
+  font-size: 14px; font-weight: 500;
+}
+.nav-icon:hover { background: rgba(255,255,255,.12); }
+.nav-icon .material-symbols-outlined { font-size: 20px; font-weight: 300; }
+.nav-user-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 12px; border-radius: 10px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  color: rgba(255,255,255,.9); font-size: 13px; font-weight: 500;
+  cursor: pointer;
+}
+.nav-avatar {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--grad);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   MAIN CONTENT AREA
+═══════════════════════════════════════════════════════════════ */
+.main {
+  padding: 28px 28px;
+  min-height: 500px;
+}
+.view-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px; gap: 16px; flex-wrap: wrap;
+}
+.view-title {
+  font-size: 24px; font-weight: 700; letter-spacing: -.02em;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════════════════════════ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 6px; height: 36px; padding: 0 16px;
+  border-radius: 10px; font-family: inherit; font-size: 14px; font-weight: 500;
+  border: 1px solid transparent; cursor: pointer; transition: all .2s;
+  white-space: nowrap;
+}
+.btn .material-symbols-outlined { font-size: 18px; }
+.btn-primary {
+  background: var(--grad-dim);
+  border-color: rgba(139,92,246,.3);
+  color: var(--text);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+.btn-primary:hover {
+  background: linear-gradient(135deg, rgba(99,102,241,.28) 0%, rgba(139,92,246,.28) 35%, rgba(236,72,153,.28) 70%, rgba(244,63,94,.28) 100%);
+  border-color: rgba(139,92,246,.45);
+}
+.btn-secondary {
+  background: var(--surface-2);
+  border-color: var(--border-strong);
+  color: var(--text);
+}
+.btn-secondary:hover { background: var(--surface); border-color: #505058; }
+.btn-ghost {
+  background: transparent; border-color: transparent;
+  color: var(--text-2);
+}
+.btn-ghost:hover { background: var(--surface-2); color: var(--text); }
+.btn-danger-outline {
+  background: transparent; border-color: rgba(239,68,68,.35);
+  color: var(--danger);
+}
+.btn-danger-outline:hover { background: rgba(239,68,68,.08); }
+.btn-sm { height: 30px; padding: 0 12px; font-size: 13px; border-radius: 8px; }
+.btn-icon-sq {
+  width: 36px; height: 36px; padding: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.btn-icon-sq .material-symbols-outlined { font-size: 18px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   INPUTS
+═══════════════════════════════════════════════════════════════ */
+.input {
+  font-family: inherit; font-size: 14px; height: 36px;
+  padding: 0 12px; border-radius: 10px;
+  background: var(--surface-2); color: var(--text);
+  border: 1px solid var(--border-strong); outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+textarea.input { height: auto; min-height: 80px; padding: 10px 12px; resize: vertical; }
+
+/* Toggle switch */
+.toggle {
+  position: relative; display: inline-block; width: 40px; height: 22px;
+  flex-shrink: 0;
+}
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-track {
+  position: absolute; inset: 0; background: var(--border-strong);
+  border-radius: 999px; cursor: pointer; transition: background .2s;
+}
+.toggle input:checked + .toggle-track { background: var(--accent); }
+.toggle-thumb {
+  position: absolute; top: 3px; left: 3px;
+  width: 16px; height: 16px; background: #fff;
+  border-radius: 50%; transition: transform .2s;
+}
+.toggle input:checked ~ .toggle-thumb { transform: translateX(18px); }
+
+/* ═══════════════════════════════════════════════════════════════
+   STATUS BADGES
+═══════════════════════════════════════════════════════════════ */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 2px 9px; border-radius: 999px;
+  font-size: 11px; font-weight: 600; letter-spacing: .03em;
+  white-space: nowrap;
+}
+.badge-draft { background: rgba(100,100,120,.2); color: #888; }
+.badge-sent { background: rgba(59,130,246,.12); color: #60b4ff; border: 1px solid rgba(59,130,246,.2); }
+.badge-paid { background: rgba(16,185,129,.12); color: #4cdb8a; border: 1px solid rgba(16,185,129,.2); }
+.badge-overdue { background: rgba(239,68,68,.12); color: #ff6b6b; border: 1px solid rgba(239,68,68,.2); }
+.badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+/* ═══════════════════════════════════════════════════════════════
+   STAT CARDS
+═══════════════════════════════════════════════════════════════ */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 16px 18px;
+  position: relative; overflow: hidden;
+}
+.stat-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--grad);
+  opacity: 0;
+  transition: opacity .3s;
+}
+.stat-card:hover::before { opacity: 1; }
+.stat-card-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--accent-dim); display: flex; align-items: center; justify-content: center;
+  margin-bottom: 10px;
+}
+.stat-card-icon .material-symbols-outlined { font-size: 17px; color: var(--accent); }
+.stat-label { font-size: 12px; color: var(--text-2); margin-bottom: 3px; }
+.stat-value { font-size: 22px; font-weight: 700; letter-spacing: -.02em; }
+.stat-sub { font-size: 11px; color: var(--text-3); margin-top: 3px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   TABLE
+═══════════════════════════════════════════════════════════════ */
+.table-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--r-lg); overflow: hidden;
+}
+.table-toolbar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.table-toolbar .input { flex: 1; min-width: 180px; }
+table.bills-table {
+  width: 100%; border-collapse: collapse;
+}
+table.bills-table th {
+  padding: 10px 16px; text-align: left;
+  font-size: 11px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--text-3);
+  background: var(--surface); border-bottom: 1px solid var(--border);
+}
+table.bills-table td {
+  padding: 14px 16px; border-bottom: 1px solid var(--border);
+  font-size: 13.5px;
+}
+table.bills-table tr:last-child td { border-bottom: none; }
+table.bills-table tbody tr { transition: background .15s; }
+table.bills-table tbody tr:hover { background: var(--surface-2); }
+.bill-num { font-weight: 600; font-family: 'Outfit', monospace; font-size: 13px; color: var(--accent); }
+.customer-name { font-weight: 500; }
+.amount { font-weight: 600; text-align: right; }
+.actions-cell { text-align: right; white-space: nowrap; }
+.icon-btn {
+  width: 30px; height: 30px; border-radius: 8px;
+  border: 1px solid var(--border); background: none;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--text-2); cursor: pointer; transition: all .15s;
+}
+.icon-btn:hover { border-color: var(--border-strong); color: var(--text); background: var(--surface-2); }
+.icon-btn .material-symbols-outlined { font-size: 16px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   SETTINGS — NEW SIDEBAR LAYOUT
+═══════════════════════════════════════════════════════════════ */
+.settings-layout {
+  display: flex; gap: 0; min-height: 600px;
+}
+
+/* Left sidebar */
+.settings-sidebar {
+  width: 220px; flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  padding: 16px 12px 24px;
+  display: flex; flex-direction: column;
+}
+.settings-sidebar .section-label { padding: 16px 8px 6px; }
+.settings-sidebar .section-label:first-child { padding-top: 4px; }
+.settings-nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 10px; border-radius: var(--r-sm);
+  font-size: 14px; font-weight: 500; color: var(--text-2);
+  cursor: pointer; transition: all .15s; text-decoration: none;
+  border: 1px solid transparent;
+}
+.settings-nav-item .material-symbols-outlined {
+  font-size: 18px; flex-shrink: 0; font-weight: 300;
+}
+.settings-nav-item:hover { color: var(--text); background: var(--surface-2); }
+.settings-nav-item.active {
+  color: var(--text);
+  background: var(--accent-dim2);
+  border-color: var(--accent-dim);
+}
+.settings-nav-item.active .material-symbols-outlined { color: var(--accent); }
+
+/* Right content panel */
+.settings-content {
+  flex: 1; padding: 24px 28px; min-width: 0;
+  overflow-y: auto;
+}
+.settings-panel-title {
+  font-size: 18px; font-weight: 700; letter-spacing: -.02em;
+  margin-bottom: 4px;
+}
+.settings-panel-desc {
+  font-size: 13px; color: var(--text-2); margin-bottom: 24px;
+}
+
+/* Settings card */
+.settings-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.settings-card-header {
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.settings-card-title {
+  font-size: 14px; font-weight: 600;
+}
+.settings-card-desc {
+  font-size: 12px; color: var(--text-2); margin-top: 2px;
+}
+.settings-card-body { padding: 20px; }
+.settings-card-body + .settings-card-body {
+  padding-top: 0;
+}
+
+/* Row inside card */
+.settings-field {
+  display: flex; align-items: flex-start;
+  padding: 14px 20px; gap: 16px;
+  border-bottom: 1px solid var(--border);
+}
+.settings-field:last-child { border-bottom: none; }
+.settings-field-info { flex: 1; min-width: 0; }
+.settings-field-label {
+  font-size: 14px; font-weight: 500; margin-bottom: 1px;
+}
+.settings-field-hint { font-size: 12px; color: var(--text-2); line-height: 1.4; }
+.settings-field-control {
+  flex-shrink: 0; display: flex; align-items: center; gap: 8px;
+}
+.settings-field-control .input {
+  min-width: 200px;
+}
+
+/* Compact input row (for email template etc) */
+.settings-row {
+  margin-bottom: 14px;
+}
+.settings-row:last-child { margin-bottom: 0; }
+.settings-row label {
+  display: block; font-size: 12px; font-weight: 600;
+  color: var(--text-2); letter-spacing: .02em;
+  margin-bottom: 5px;
+}
+.settings-row .input { width: 100%; }
+
+/* Appearance cards — visual selectors */
+.theme-cards { display: flex; gap: 10px; }
+.theme-card {
+  flex: 1; padding: 14px;
+  border: 2px solid var(--border);
+  border-radius: var(--r-md); cursor: pointer; transition: all .2s;
+  text-align: center;
+}
+.theme-card.selected {
+  border-color: var(--accent);
+  background: var(--accent-dim2);
+}
+.theme-preview {
+  height: 52px; border-radius: 8px; margin-bottom: 8px;
+  border: 1px solid rgba(255,255,255,.08);
+}
+.theme-preview-dark { background: linear-gradient(180deg, #1c1c1e 0%, #111113 100%); }
+.theme-preview-light { background: linear-gradient(180deg, #f5f5f7 0%, #e8e8ed 100%); }
+.theme-card-name { font-size: 13px; font-weight: 500; }
+
+/* List items in settings (companies, customers, services) */
+.list-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 20px; border-bottom: 1px solid var(--border);
+  transition: background .12s;
+}
+.list-item:hover { background: var(--surface-2); }
+.list-item:last-child { border-bottom: none; }
+.list-item-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--accent-dim); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.list-item-icon .material-symbols-outlined { font-size: 16px; color: var(--accent); }
+.list-item-info { flex: 1; min-width: 0; }
+.list-item-name { font-weight: 500; font-size: 14px; }
+.list-item-meta { font-size: 12px; color: var(--text-2); margin-top: 1px; }
+.list-item-actions { display: flex; gap: 5px; opacity: 0; transition: opacity .15s; }
+.list-item:hover .list-item-actions { opacity: 1; }
+.list-item-default {
+  font-size: 10px; font-weight: 600; letter-spacing: .05em;
+  text-transform: uppercase; color: var(--accent);
+  background: var(--accent-dim); padding: 2px 7px; border-radius: 999px;
+}
+
+/* Danger zone */
+.danger-zone {
+  background: rgba(239,68,68,.04);
+  border: 1px solid rgba(239,68,68,.2);
+  border-radius: var(--r-lg); padding: 20px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.danger-zone-info .danger-zone-title { font-size: 14px; font-weight: 600; color: var(--danger); }
+.danger-zone-info .danger-zone-desc { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   EDITOR MODAL
+═══════════════════════════════════════════════════════════════ */
+.modal-wrap {
+  background: var(--surface);
+  border-radius: var(--r-xl);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--sh-lg);
+  overflow: hidden;
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 24px; border-bottom: 1px solid var(--border);
+  gap: 16px;
+}
+.modal-title { font-size: 18px; font-weight: 700; letter-spacing: -.02em; }
+.modal-body { padding: 24px; }
+.editor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.editor-section {
+  background: var(--surface-2); border-radius: var(--r-lg);
+  border: 1px solid var(--border); padding: 18px;
+}
+.editor-section-title {
+  font-size: 12px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--text-3);
+  margin-bottom: 14px;
+}
+.field { margin-bottom: 12px; }
+.field:last-child { margin-bottom: 0; }
+.field label {
+  display: block; font-size: 12px; font-weight: 600;
+  color: var(--text-2); margin-bottom: 4px; letter-spacing: .02em;
+}
+.field .input { width: 100%; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* Line items table in editor */
+.line-items-header {
+  display: grid;
+  grid-template-columns: 3fr 80px 100px 80px 36px;
+  gap: 8px; padding: 0 0 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--text-3);
+  border-bottom: 1px solid var(--border);
+}
+.line-item {
+  display: grid;
+  grid-template-columns: 3fr 80px 100px 80px 36px;
+  gap: 8px; padding: 8px 0; align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+.line-item:last-child { border-bottom: none; }
+.line-item .input { width: 100%; font-size: 13px; }
+
+/* Summary */
+.invoice-summary {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--r-md); padding: 14px 16px;
+  margin-top: 16px;
+}
+.summary-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 4px 0; font-size: 13px; color: var(--text-2);
+}
+.summary-row.total {
+  padding-top: 10px; margin-top: 6px;
+  border-top: 1px solid var(--border);
+  font-size: 16px; font-weight: 700; color: var(--text);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LOGIN SCREEN
+═══════════════════════════════════════════════════════════════ */
+.login-screen {
+  position: relative; overflow: hidden;
+  min-height: 520px; display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+}
+.login-bg {
+  position: absolute; inset: 0;
+  background: var(--grad); background-size: 300% 300%;
+  animation: grad-shift 18s ease infinite; opacity: .88;
+}
+.login-overlay {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,.3);
+  backdrop-filter: blur(0px);
+}
+.login-hero, .login-card-wrap {
+  position: relative; z-index: 2; padding: 48px 40px;
+}
+.login-hero-title {
+  font-size: 38px; font-weight: 700; color: #fff;
+  letter-spacing: -.03em; line-height: 1.15; margin-bottom: 14px;
+}
+.login-hero-sub {
+  font-size: 16px; color: rgba(255,255,255,.85); line-height: 1.55;
+  max-width: 380px; margin-bottom: 28px;
+}
+.login-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+  border-radius: 999px; padding: 5px 14px; font-size: 13px;
+  font-weight: 500; color: rgba(255,255,255,.9); margin-bottom: 20px;
+}
+.login-pill .material-symbols-outlined { font-size: 15px; }
+.login-features {
+  display: flex; flex-direction: column; gap: 10px;
+}
+.login-feature {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 14px; color: rgba(255,255,255,.88);
+}
+.login-feature .material-symbols-outlined { font-size: 17px; opacity: .7; }
+
+.login-card-wrap { display: flex; align-items: center; justify-content: center; }
+.login-card {
+  background: rgba(255,255,255,.07);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 20px; padding: 36px;
+  width: 100%; max-width: 380px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.15);
+}
+.login-card-title { font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.login-card-sub { font-size: 14px; color: rgba(255,255,255,.75); margin-bottom: 28px; }
+.google-btn {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 13px 20px;
+  background: rgba(255,255,255,.94); border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.4); font-size: 15px; font-weight: 600;
+  color: #1a1a1a; text-decoration: none; cursor: pointer;
+  transition: all .2s; margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.12);
+}
+.google-btn:hover { background: #fff; box-shadow: 0 4px 16px rgba(0,0,0,.18); }
+.or-divider {
+  display: flex; align-items: center; gap: 12px;
+  color: rgba(255,255,255,.35); font-size: 12px; margin-bottom: 20px;
+}
+.or-divider::before, .or-divider::after {
+  content: ''; flex: 1; height: 1px; background: rgba(255,255,255,.15);
+}
+.email-field { margin-bottom: 10px; }
+.email-field label {
+  display: block; font-size: 12px; font-weight: 600;
+  color: rgba(255,255,255,.6); letter-spacing: .03em; margin-bottom: 5px;
+}
+.email-field .input {
+  width: 100%; background: rgba(255,255,255,.1);
+  border-color: rgba(255,255,255,.18); color: #fff;
+  border-radius: 10px;
+}
+.email-field .input::placeholder { color: rgba(255,255,255,.4); }
+.login-btn {
+  width: 100%; height: 42px; border-radius: 10px;
+  background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.3);
+  color: #fff; font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: all .2s; font-family: inherit; margin-top: 4px;
+}
+.login-btn:hover { background: rgba(255,255,255,.28); }
+
+/* ═══════════════════════════════════════════════════════════════
+   PAGE LAYOUT
+═══════════════════════════════════════════════════════════════ */
+body { padding: 24px 24px 40px; }
+h1.page-title {
+  font-size: 28px; font-weight: 800; letter-spacing: -.03em;
+  color: var(--text); margin-bottom: 4px; text-align: center;
+}
+p.page-sub {
+  font-size: 15px; color: var(--text-2); text-align: center;
+  margin-bottom: 40px;
+}
+.legend {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  justify-content: center; margin-bottom: 36px;
+}
+.legend-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--text-2);
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 999px; padding: 4px 12px;
+}
+.legend-dot { width: 7px; height: 7px; border-radius: 50%; }
+.legend-dot-new { background: var(--accent); }
+.legend-dot-keep { background: var(--text-3); }
+
+/* Annotation callouts */
+.annotation {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(20,184,166,.12); border: 1px solid rgba(20,184,166,.25);
+  border-radius: 999px; padding: 3px 10px; font-size: 11px; font-weight: 600;
+  color: var(--accent); letter-spacing: .02em;
+  margin-left: 8px; vertical-align: middle;
+}
+.annot-block {
+  background: rgba(20,184,166,.06); border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0; padding: 8px 14px;
+  font-size: 12px; color: var(--accent); margin: 12px 0;
+  font-weight: 500;
+}
+</style>
+</head>
+<body>
+
+<h1 class="page-title">Qlynton — Design System</h1>
+<p class="page-sub">Redesigned UI for all screens · Stitch-inspired visual language</p>
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot legend-dot-new"></div> New / Improved</div>
+  <div class="legend-item"><div class="legend-dot legend-dot-keep"></div> Kept as-is</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 1: LOGIN
+══════════════════════════════════════════════════════════ -->
+<div class="screen-label">Screen 1 · Login / Sign-in</div>
+<div class="screen-wrap" style="padding:0">
+  <div class="login-screen">
+    <div class="login-bg"></div>
+    <div class="login-overlay"></div>
+    <!-- Hero left -->
+    <div class="login-hero">
+      <div class="login-pill">
+        <span class="material-symbols-outlined">receipt_long</span>
+        Invoice software for freelancers
+      </div>
+      <h1 class="login-hero-title">Send invoices.<br><span style="opacity:.85">Get paid faster.</span></h1>
+      <p class="login-hero-sub">Create professional invoices, manage clients and track payments — all in one place.</p>
+      <div class="login-features">
+        <div class="login-feature"><span class="material-symbols-outlined">check_circle</span> PDF invoices in seconds</div>
+        <div class="login-feature"><span class="material-symbols-outlined">check_circle</span> Multi-currency & VAT support</div>
+        <div class="login-feature"><span class="material-symbols-outlined">check_circle</span> Google Drive backup</div>
+        <div class="login-feature"><span class="material-symbols-outlined">check_circle</span> Multi-language invoices</div>
+      </div>
+    </div>
+    <!-- Card right -->
+    <div class="login-card-wrap">
+      <div class="login-card">
+        <div class="login-card-title">Welcome back</div>
+        <div class="login-card-sub">Sign in to your Qlynton account</div>
+        <a href="#" class="google-btn">
+          <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/><path fill="#FBBC05" d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71 0-.593.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
+          Continue with Google
+        </a>
+        <div class="or-divider">or</div>
+        <div class="email-field">
+          <label>EMAIL</label>
+          <input class="input" type="email" placeholder="you@example.com">
+        </div>
+        <div class="email-field">
+          <label>PASSWORD</label>
+          <input class="input" type="password" placeholder="••••••••">
+        </div>
+        <button class="login-btn">Sign in</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 2: BILLS LIST
+══════════════════════════════════════════════════════════ -->
+<div class="screen-label">Screen 2 · My Invoices (Bills List)</div>
+<div class="screen-wrap" style="padding:0">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-bg"></div>
+    <div class="header-overlay"></div>
+    <div class="header-inner">
+      <div class="header-left">
+        <a href="#" class="logo">Qlynton</a>
+        <nav class="nav">
+          <a href="#" class="nav-link nav-cta">My Invoices</a>
+          <a href="#" class="nav-link">+ Create invoice</a>
+        </nav>
+      </div>
+      <div class="header-right">
+        <button class="nav-icon" title="Online banking"><span class="material-symbols-outlined">account_balance</span></button>
+        <button class="nav-icon" title="Toggle theme"><span class="material-symbols-outlined">dark_mode</span></button>
+        <button class="nav-icon" title="Language"><span class="material-symbols-outlined">translate</span></button>
+        <button class="nav-icon" title="Help"><span class="material-symbols-outlined">help</span></button>
+        <button class="nav-icon" title="Settings"><span class="material-symbols-outlined">settings</span></button>
+        <div class="nav-user-pill">
+          <div class="nav-avatar">P</div>
+          Pjotrs
+        </div>
+        <button class="nav-icon" title="Log out"><span class="material-symbols-outlined">logout</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- View header -->
+    <div class="view-header">
+      <div class="view-title">My Invoices</div>
+      <button class="btn btn-primary">
+        <span class="material-symbols-outlined">add</span>
+        New invoice
+      </button>
+    </div>
+
+    <!-- Stats strip — NEW -->
+    <div class="annot-block">✦ New: Stats summary bar now visible at top of bills list</div>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-card-icon"><span class="material-symbols-outlined">receipt_long</span></div>
+        <div class="stat-label">Total invoices</div>
+        <div class="stat-value">48</div>
+        <div class="stat-sub">All time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon"><span class="material-symbols-outlined">pending</span></div>
+        <div class="stat-label">Outstanding</div>
+        <div class="stat-value" style="color:var(--warning)">€2,450</div>
+        <div class="stat-sub">3 invoices</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon"><span class="material-symbols-outlined">check_circle</span></div>
+        <div class="stat-label">Paid this month</div>
+        <div class="stat-value" style="color:var(--success)">€8,200</div>
+        <div class="stat-sub">6 invoices</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon"><span class="material-symbols-outlined">warning</span></div>
+        <div class="stat-label">Overdue</div>
+        <div class="stat-value" style="color:var(--danger)">€650</div>
+        <div class="stat-sub">1 invoice</div>
+      </div>
+    </div>
+
+    <!-- Table card -->
+    <div class="table-card">
+      <div class="table-toolbar">
+        <input class="input" type="search" placeholder="Search invoices…" style="max-width:240px">
+        <select class="input" style="min-width:150px"><option>All customers</option></select>
+        <select class="input" style="min-width:130px"><option>All statuses</option></select>
+        <input class="input" type="date" style="min-width:140px">
+        <input class="input" type="date" style="min-width:140px">
+        <div style="flex:1"></div>
+        <button class="btn btn-secondary btn-sm">Reset filters</button>
+      </div>
+      <table class="bills-table">
+        <thead>
+          <tr>
+            <th style="width:160px">Number</th>
+            <th style="width:140px">Date</th>
+            <th>Customer</th>
+            <th style="width:110px">Status</th>
+            <th style="width:110px;text-align:right">Total</th>
+            <th style="width:90px;text-align:right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="bill-num">QE-2025-0048</td>
+            <td class="t-muted">14/03/2026</td>
+            <td class="customer-name">Acme Corporation</td>
+            <td><span class="badge badge-paid"><span class="badge-dot"></span>Paid</span></td>
+            <td class="amount">€3,200.00</td>
+            <td class="actions-cell">
+              <button class="icon-btn"><span class="material-symbols-outlined">picture_as_pdf</span></button>
+              <button class="icon-btn"><span class="material-symbols-outlined">more_vert</span></button>
+            </td>
+          </tr>
+          <tr>
+            <td class="bill-num">QE-2025-0047</td>
+            <td class="t-muted">28/02/2026</td>
+            <td class="customer-name">TechStart OÜ</td>
+            <td><span class="badge badge-sent"><span class="badge-dot"></span>Sent</span></td>
+            <td class="amount">€1,800.00</td>
+            <td class="actions-cell">
+              <button class="icon-btn"><span class="material-symbols-outlined">picture_as_pdf</span></button>
+              <button class="icon-btn"><span class="material-symbols-outlined">more_vert</span></button>
+            </td>
+          </tr>
+          <tr>
+            <td class="bill-num">QE-2025-0046</td>
+            <td class="t-muted">12/02/2026</td>
+            <td class="customer-name">Global Media Group</td>
+            <td><span class="badge badge-overdue"><span class="badge-dot"></span>Overdue</span></td>
+            <td class="amount">€650.00</td>
+            <td class="actions-cell">
+              <button class="icon-btn"><span class="material-symbols-outlined">picture_as_pdf</span></button>
+              <button class="icon-btn"><span class="material-symbols-outlined">more_vert</span></button>
+            </td>
+          </tr>
+          <tr>
+            <td class="bill-num">QE-2025-0045</td>
+            <td class="t-muted">01/02/2026</td>
+            <td class="customer-name">Sunrise Designs</td>
+            <td><span class="badge badge-draft"><span class="badge-dot"></span>Draft</span></td>
+            <td class="amount">€4,100.00</td>
+            <td class="actions-cell">
+              <button class="icon-btn"><span class="material-symbols-outlined">picture_as_pdf</span></button>
+              <button class="icon-btn"><span class="material-symbols-outlined">more_vert</span></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 3: INVOICE EDITOR
+══════════════════════════════════════════════════════════ -->
+<div class="screen-label">Screen 3 · Invoice Editor</div>
+<div class="screen-wrap" style="padding:0">
+  <!-- Header same as above (abbreviated) -->
+  <div class="header">
+    <div class="header-bg"></div><div class="header-overlay"></div>
+    <div class="header-inner">
+      <div class="header-left"><a href="#" class="logo">Qlynton</a><nav class="nav"><a href="#" class="nav-link">My Invoices</a></nav></div>
+      <div class="header-right">
+        <button class="nav-icon"><span class="material-symbols-outlined">dark_mode</span></button>
+        <button class="nav-icon"><span class="material-symbols-outlined">settings</span></button>
+        <div class="nav-user-pill"><div class="nav-avatar">P</div>Pjotrs</div>
+      </div>
+    </div>
+  </div>
+  <div class="main">
+    <!-- Modal-style editor inline -->
+    <div class="modal-wrap">
+      <div class="modal-header">
+        <div class="modal-title">New invoice</div>
+        <div class="flex gap-8">
+          <button class="btn btn-ghost">Close</button>
+          <button class="btn btn-primary">Save invoice</button>
+        </div>
+      </div>
+      <div class="modal-body">
+        <div class="editor-grid">
+          <!-- From / To -->
+          <div class="editor-section">
+            <div class="editor-section-title">From (Your company)</div>
+            <div class="field">
+              <label>COMPANY</label>
+              <select class="input">
+                <option>Qlynton Solutions SIA</option>
+              </select>
+            </div>
+          </div>
+          <div class="editor-section">
+            <div class="editor-section-title">To (Customer)</div>
+            <div class="field">
+              <label>CUSTOMER</label>
+              <select class="input">
+                <option>Acme Corporation</option>
+              </select>
+            </div>
+          </div>
+          <!-- Invoice details -->
+          <div class="editor-section">
+            <div class="editor-section-title">Invoice details</div>
+            <div class="field-row">
+              <div class="field"><label>NUMBER</label><input class="input" value="QE-2026-0049"></div>
+              <div class="field"><label>DATE</label><input class="input" type="date" value="2026-03-27"></div>
+            </div>
+            <div class="field-row">
+              <div class="field"><label>DUE DATE</label><input class="input" type="date" value="2026-04-10"></div>
+              <div class="field"><label>CURRENCY</label><select class="input"><option>EUR €</option></select></div>
+            </div>
+          </div>
+          <!-- Status & notes -->
+          <div class="editor-section">
+            <div class="editor-section-title">Status &amp; notes</div>
+            <div class="field">
+              <label>STATUS</label>
+              <select class="input"><option>Draft</option><option>Sent</option><option>Paid</option></select>
+            </div>
+            <div class="field">
+              <label>NOTES (OPTIONAL)</label>
+              <textarea class="input" rows="3" placeholder="Payment terms, bank details…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Line items -->
+        <div class="editor-section" style="margin-top:20px">
+          <div class="flex items-center justify-between" style="margin-bottom:12px">
+            <div class="editor-section-title" style="margin-bottom:0">Line items</div>
+            <button class="btn btn-secondary btn-sm">
+              <span class="material-symbols-outlined">add</span> Add item
+            </button>
+          </div>
+          <div class="line-items-header">
+            <span>Description</span><span style="text-align:right">Qty</span>
+            <span style="text-align:right">Unit price</span><span style="text-align:right">VAT %</span><span></span>
+          </div>
+          <div class="line-item">
+            <input class="input" value="Web development — March 2026">
+            <input class="input" value="1" style="text-align:right">
+            <input class="input" value="3,000.00" style="text-align:right">
+            <input class="input" value="21" style="text-align:right">
+            <button class="icon-btn"><span class="material-symbols-outlined">delete</span></button>
+          </div>
+          <div class="line-item">
+            <input class="input" value="Hosting & maintenance">
+            <input class="input" value="1" style="text-align:right">
+            <input class="input" value="150.00" style="text-align:right">
+            <input class="input" value="21" style="text-align:right">
+            <button class="icon-btn"><span class="material-symbols-outlined">delete</span></button>
+          </div>
+          <div class="invoice-summary">
+            <div class="summary-row"><span>Subtotal</span><span>€3,150.00</span></div>
+            <div class="summary-row"><span>VAT (21%)</span><span>€661.50</span></div>
+            <div class="summary-row total"><span>Total</span><span>€3,811.50</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCREEN 4: SETTINGS — NEW SIDEBAR UX
+══════════════════════════════════════════════════════════ -->
+<div class="screen-label">Screen 4 · Settings <span class="annotation">✦ Major UX redesign</span></div>
+<div class="annot-block" style="max-width:1300px;margin:0 auto 16px">
+  ✦ Settings redesigned: sidebar tab navigation replaces long scrolling page · Each section in its own focused panel · Better visual hierarchy with cards · Toggle switches instead of dropdowns for appearance
+</div>
+<div class="screen-wrap" style="padding:0">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-bg"></div><div class="header-overlay"></div>
+    <div class="header-inner">
+      <div class="header-left"><a href="#" class="logo">Qlynton</a>
+        <nav class="nav">
+          <a href="#" class="nav-link">My Invoices</a>
+          <a href="#" class="nav-link">+ Create invoice</a>
+        </nav>
+      </div>
+      <div class="header-right">
+        <button class="nav-icon"><span class="material-symbols-outlined">dark_mode</span></button>
+        <button class="nav-icon" style="color:rgba(255,255,255,1);background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.2)"><span class="material-symbols-outlined">settings</span></button>
+        <div class="nav-user-pill"><div class="nav-avatar">P</div>Pjotrs</div>
+        <button class="nav-icon"><span class="material-symbols-outlined">logout</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="main" style="padding:0">
+    <div class="settings-layout">
+      <!-- Sidebar -->
+      <div class="settings-sidebar">
+        <div class="section-label">Account</div>
+        <a class="settings-nav-item active" href="#">
+          <span class="material-symbols-outlined">manage_accounts</span>
+          Account
+        </a>
+
+        <div class="section-label">Business</div>
+        <a class="settings-nav-item" href="#">
+          <span class="material-symbols-outlined">business</span>
+          My Companies
+        </a>
+        <a class="settings-nav-item" href="#">
+          <span class="material-symbols-outlined">people</span>
+          Customers
+        </a>
+        <a class="settings-nav-item" href="#">
+          <span class="material-symbols-outlined">inventory_2</span>
+          Services &amp; Products
+        </a>
+
+        <div class="section-label">Integrations</div>
+        <a class="settings-nav-item" href="#">
+          <span class="material-symbols-outlined">mail</span>
+          Email Templates
+        </a>
+        <a class="settings-nav-item" href="#">
+          <span class="material-symbols-outlined">add_to_drive</span>
+          Google Drive
+        </a>
+
+        <div class="section-label">Preferences</div>
+        <a class="settings-nav-item" href="#">
+          <span class="material-symbols-outlined">palette</span>
+          Appearance &amp; Language
+        </a>
+        <a class="settings-nav-item" href="#">
+          <span class="material-symbols-outlined">database</span>
+          Data
+        </a>
+      </div>
+
+      <!-- Content: Account panel (active) -->
+      <div class="settings-content">
+        <div class="settings-panel-title">Account</div>
+        <div class="settings-panel-desc">Manage your personal account details and sign-in options.</div>
+
+        <!-- Profile card -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div>
+              <div class="settings-card-title">Profile</div>
+              <div class="settings-card-desc">Your public name on invoices and documents</div>
+            </div>
+          </div>
+          <div class="settings-field">
+            <div class="settings-field-info">
+              <div class="settings-field-label">Display name</div>
+              <div class="settings-field-hint">Shown on invoices and in the app header</div>
+            </div>
+            <div class="settings-field-control">
+              <input class="input" value="Pjotrs Osnovskis" style="min-width:220px">
+              <button class="btn btn-primary">Save</button>
+            </div>
+          </div>
+          <div class="settings-field">
+            <div class="settings-field-info">
+              <div class="settings-field-label">Email address</div>
+              <div class="settings-field-hint">pjotrs.osnovskis@gmail.com · Used to sign in. Cannot be changed.</div>
+            </div>
+            <div class="settings-field-control">
+              <span class="badge badge-paid">Verified</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Security card -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div>
+              <div class="settings-card-title">Security</div>
+              <div class="settings-card-desc">Manage how you sign in to Qlynton</div>
+            </div>
+          </div>
+          <div class="settings-field">
+            <div class="settings-field-info">
+              <div class="settings-field-label">Password</div>
+              <div class="settings-field-hint">A reset link will be sent to your email address.</div>
+            </div>
+            <div class="settings-field-control">
+              <button class="btn btn-secondary">Change password…</button>
+            </div>
+          </div>
+          <div class="settings-field">
+            <div class="settings-field-info">
+              <div class="settings-field-label">Sign-in with Google</div>
+              <div class="settings-field-hint">pjotrs.osnovskis@gmail.com · Your account is linked to Google.</div>
+            </div>
+            <div class="settings-field-control">
+              <span class="badge badge-paid">Connected</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Danger zone -->
+        <div style="margin-top:8px">
+          <div class="danger-zone">
+            <div class="danger-zone-info">
+              <div class="danger-zone-title">Delete account</div>
+              <div class="danger-zone-desc">Permanently delete your account and all data. This cannot be undone.</div>
+            </div>
+            <button class="btn btn-danger-outline">Delete account…</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Settings — Companies panel (second panel example) -->
+<div class="screen-label">Screen 4b · Settings · My Companies panel</div>
+<div class="screen-wrap" style="padding:0">
+  <div class="header"><div class="header-bg"></div><div class="header-overlay"></div>
+    <div class="header-inner">
+      <div class="header-left"><a href="#" class="logo">Qlynton</a></div>
+      <div class="header-right"><button class="nav-icon"><span class="material-symbols-outlined">settings</span></button></div>
+    </div>
+  </div>
+  <div class="main" style="padding:0">
+    <div class="settings-layout">
+      <div class="settings-sidebar">
+        <div class="section-label">Account</div>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">manage_accounts</span>Account</a>
+        <div class="section-label">Business</div>
+        <a class="settings-nav-item active" href="#"><span class="material-symbols-outlined">business</span>My Companies</a>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">people</span>Customers</a>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">inventory_2</span>Services &amp; Products</a>
+        <div class="section-label">Integrations</div>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">mail</span>Email Templates</a>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">add_to_drive</span>Google Drive</a>
+        <div class="section-label">Preferences</div>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">palette</span>Appearance &amp; Language</a>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">database</span>Data</a>
+      </div>
+      <div class="settings-content">
+        <div class="settings-panel-title">My Companies</div>
+        <div class="settings-panel-desc">Manage the companies you issue invoices from. The default company is pre-selected when creating new invoices.</div>
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div>
+              <div class="settings-card-title">Companies</div>
+              <div class="settings-card-desc">1 company configured</div>
+            </div>
+            <button class="btn btn-primary btn-sm">
+              <span class="material-symbols-outlined">add</span> Add company
+            </button>
+          </div>
+          <div class="list-item">
+            <div class="list-item-icon"><span class="material-symbols-outlined">business</span></div>
+            <div class="list-item-info">
+              <div class="list-item-name">Qlynton Solutions SIA</div>
+              <div class="list-item-meta">Reg. 40203456789 · LV · Swedbank</div>
+            </div>
+            <span class="list-item-default">Default</span>
+            <div class="list-item-actions">
+              <button class="icon-btn"><span class="material-symbols-outlined">edit</span></button>
+              <button class="icon-btn" style="color:var(--danger);border-color:rgba(239,68,68,.3)"><span class="material-symbols-outlined">delete</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Settings — Appearance panel -->
+<div class="screen-label">Screen 4c · Settings · Appearance &amp; Language panel <span class="annotation">✦ Visual selectors</span></div>
+<div class="screen-wrap" style="padding:0">
+  <div class="header"><div class="header-bg"></div><div class="header-overlay"></div>
+    <div class="header-inner">
+      <div class="header-left"><a href="#" class="logo">Qlynton</a></div>
+      <div class="header-right"><button class="nav-icon" style="color:rgba(255,255,255,1);background:rgba(255,255,255,.15)"><span class="material-symbols-outlined">settings</span></button></div>
+    </div>
+  </div>
+  <div class="main" style="padding:0">
+    <div class="settings-layout">
+      <div class="settings-sidebar">
+        <div class="section-label">Account</div>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">manage_accounts</span>Account</a>
+        <div class="section-label">Business</div>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">business</span>My Companies</a>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">people</span>Customers</a>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">inventory_2</span>Services &amp; Products</a>
+        <div class="section-label">Integrations</div>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">mail</span>Email Templates</a>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">add_to_drive</span>Google Drive</a>
+        <div class="section-label">Preferences</div>
+        <a class="settings-nav-item active" href="#"><span class="material-symbols-outlined">palette</span>Appearance &amp; Language</a>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">database</span>Data</a>
+      </div>
+      <div class="settings-content">
+        <div class="settings-panel-title">Appearance &amp; Language</div>
+        <div class="settings-panel-desc">Choose how Qlynton looks and the language used for the app and invoices.</div>
+
+        <!-- Theme card with visual selectors -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div>
+              <div class="settings-card-title">Theme</div>
+              <div class="settings-card-desc">Choose your preferred colour mode</div>
+            </div>
+          </div>
+          <div class="settings-card-body">
+            <div class="theme-cards">
+              <div class="theme-card">
+                <div class="theme-preview theme-preview-light"></div>
+                <div class="theme-card-name">Light</div>
+              </div>
+              <div class="theme-card selected">
+                <div class="theme-preview theme-preview-dark"></div>
+                <div class="theme-card-name t-accent">Dark ✓</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Language card -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div>
+              <div class="settings-card-title">Language</div>
+              <div class="settings-card-desc">App language and the language used on invoices may differ</div>
+            </div>
+          </div>
+          <div class="settings-field">
+            <div class="settings-field-info">
+              <div class="settings-field-label">App language</div>
+              <div class="settings-field-hint">Language used throughout the interface</div>
+            </div>
+            <div class="settings-field-control">
+              <select class="input" style="min-width:160px">
+                <option>English</option>
+                <option>Latviešu</option>
+                <option>Русский</option>
+              </select>
+            </div>
+          </div>
+          <div class="settings-field">
+            <div class="settings-field-info">
+              <div class="settings-field-label">Invoice language</div>
+              <div class="settings-field-hint">Language used on generated PDF invoices</div>
+            </div>
+            <div class="settings-field-control">
+              <select class="input" style="min-width:160px">
+                <option>Latviešu</option>
+                <option>English</option>
+                <option>Русский</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Settings — Google Drive panel -->
+<div class="screen-label">Screen 4d · Settings · Google Drive panel</div>
+<div class="screen-wrap" style="padding:0">
+  <div class="header"><div class="header-bg"></div><div class="header-overlay"></div>
+    <div class="header-inner"><div class="header-left"><a href="#" class="logo">Qlynton</a></div></div>
+  </div>
+  <div class="main" style="padding:0">
+    <div class="settings-layout">
+      <div class="settings-sidebar">
+        <div class="section-label">Account</div>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">manage_accounts</span>Account</a>
+        <div class="section-label">Business</div>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">business</span>My Companies</a>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">people</span>Customers</a>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">inventory_2</span>Services &amp; Products</a>
+        <div class="section-label">Integrations</div>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">mail</span>Email Templates</a>
+        <a class="settings-nav-item active" href="#"><span class="material-symbols-outlined">add_to_drive</span>Google Drive</a>
+        <div class="section-label">Preferences</div>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">palette</span>Appearance &amp; Language</a>
+        <a class="settings-nav-item" href="#"><span class="material-symbols-outlined">database</span>Data</a>
+      </div>
+      <div class="settings-content">
+        <div class="settings-panel-title">Google Drive</div>
+        <div class="settings-panel-desc">Automatically upload invoice PDFs to your Google Drive after sending or saving.</div>
+
+        <!-- Connected state -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div>
+              <div class="settings-card-title">Connection</div>
+            </div>
+            <span class="badge badge-paid">Connected</span>
+          </div>
+          <div class="settings-field">
+            <div class="settings-field-info">
+              <div class="settings-field-label">Connected account</div>
+              <div class="settings-field-hint">pjotrs.osnovskis@gmail.com</div>
+            </div>
+            <div class="settings-field-control">
+              <button class="btn btn-danger-outline btn-sm">Disconnect</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div><div class="settings-card-title">Upload settings</div></div>
+            <button class="btn btn-primary btn-sm">Save settings</button>
+          </div>
+          <div class="settings-field">
+            <div class="settings-field-info">
+              <div class="settings-field-label">Upload folder</div>
+              <div class="settings-field-hint">Leave empty to save to My Drive root</div>
+            </div>
+            <div class="settings-field-control" style="gap:6px">
+              <input class="input" value="Qlynton/Invoices" style="min-width:200px" readonly>
+              <button class="btn btn-secondary btn-sm">Browse…</button>
+            </div>
+          </div>
+          <div class="settings-field">
+            <div class="settings-field-info">
+              <div class="settings-field-label">Monthly subfolders</div>
+              <div class="settings-field-hint">Organise invoices into month-named subfolders (e.g. 2026-03)</div>
+            </div>
+            <div class="settings-field-control">
+              <label class="toggle">
+                <input type="checkbox" checked>
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+            </div>
+          </div>
+          <div class="settings-field">
+            <div class="settings-field-info">
+              <div class="settings-field-label">Folder name format</div>
+              <div class="settings-field-hint">Used when monthly subfolders is enabled</div>
+            </div>
+            <div class="settings-field-control">
+              <select class="input" style="min-width:160px">
+                <option>YYYY-MM</option>
+                <option>MMMM YYYY</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p style="text-align:center;color:var(--text-3);font-size:12px;padding:32px 0 8px">
+  End of design mockup · Qlynton redesign proposal
+</p>
+</body>
+</html>

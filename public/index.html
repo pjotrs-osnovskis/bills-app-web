@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qlynton</title>
+  <script>
+    (function () {
+      var s = localStorage.getItem('bills-app-theme');
+      if (s === 'light' || s === 'dark') document.documentElement.setAttribute('data-theme', s);
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="header hidden" id="header-app">
+    <div class="header-inner">
+      <div class="header-left">
+        <a href="#/" class="header-logo">Qlynton</a>
+        <nav class="nav">
+          <a href="#/" class="nav-link" data-view="bills" data-i18n="nav.bills">My Invoices</a>
+          <a href="#/new" class="nav-link btn btn-primary nav-btn-new" data-view="editor" data-i18n="nav.createNewBill">Create new invoice</a>
+        </nav>
+      </div>
+      <div class="nav-user" id="nav-user">
+        <div class="nav-user-tools">
+          <a href="#" id="nav-bank-link" class="nav-icon-btn hidden" target="_blank" rel="noopener noreferrer" data-i18n-title="settings.bankGoLink" title="Go to online banking" aria-label="Go to online banking">
+            <span class="material-symbols-outlined" aria-hidden="true">account_balance</span>
+          </a>
+          <button type="button" class="nav-icon-btn" id="nav-theme-btn" aria-label="Toggle theme" title="Toggle theme">
+            <span class="material-symbols-outlined nav-icon-light" aria-hidden="true">light_mode</span>
+            <span class="material-symbols-outlined nav-icon-dark" aria-hidden="true">dark_mode</span>
+          </button>
+          <div class="nav-lang-wrap" id="nav-lang-wrap">
+            <button type="button" class="nav-icon-btn nav-lang-btn" id="nav-lang-btn" aria-label="Language" aria-haspopup="true" aria-expanded="false">
+              <span class="material-symbols-outlined" aria-hidden="true">translate</span>
+            </button>
+            <div class="nav-lang-dropdown" id="nav-lang-dropdown" hidden>
+              <button type="button" class="nav-lang-option" data-locale="en">English</button>
+              <button type="button" class="nav-lang-option" data-locale="lv">Latviešu</button>
+              <button type="button" class="nav-lang-option" data-locale="ru">Русский</button>
+            </div>
+          </div>
+          <a href="#/faq" class="nav-icon-btn nav-help-link" data-view="faq" data-i18n-title="nav.help" data-i18n-aria-label="nav.help" title="Help" aria-label="Help">
+            <span class="material-symbols-outlined" aria-hidden="true">help</span>
+          </a>
+          <a href="#/settings" class="nav-icon-btn nav-settings-link" data-view="settings" data-i18n-title="nav.settings" data-i18n-aria-label="nav.settings" title="Settings" aria-label="Settings">
+            <span class="material-symbols-outlined" aria-hidden="true">settings</span>
+          </a>
+        </div>
+        <div class="nav-user-name-wrap" id="nav-user-name-wrap">
+          <span class="nav-user-account" id="nav-user-account"></span>
+        </div>
+        <a href="/auth/logout" class="nav-icon-btn nav-logout-btn" id="nav-logout" aria-label="Log out" title="Log out" data-i18n-title="auth.logout">
+          <span class="material-symbols-outlined" aria-hidden="true">logout</span>
+        </a>
+      </div>
+  </div>
+  </header>
+  <div id="app-loading" class="app-loading" aria-hidden="true">
+    <div class="app-loading-logo">Qlynton</div>
+    <div class="app-loading-spinner" aria-hidden="true"></div>
+  </div>
+  <div id="auth-login" class="auth-login hidden">
+    <div class="auth-login-bg" aria-hidden="true"></div>
+    <div id="auth-login-particles" class="auth-login-particles" aria-hidden="true"></div>
+    <div class="auth-login-top">
+      <div class="auth-login-logo-wrap">
+        <div class="auth-login-logo">
+          <span class="auth-login-logo-text">Qlynton</span>
+        </div>
+      </div>
+      <div class="auth-login-lang-wrap">
+        <div class="auth-login-locale-trigger-wrap">
+          <button type="button" class="auth-login-locale-trigger" id="auth-login-locale-trigger" aria-haspopup="listbox" aria-expanded="false" aria-label="Language">
+            <span class="auth-login-locale-value" id="auth-login-locale-value">English</span>
+            <span class="auth-login-locale-chevron" aria-hidden="true"></span>
+          </button>
+          <div class="auth-login-locale-dropdown" id="auth-login-locale-dropdown" role="listbox" hidden>
+            <button type="button" role="option" class="auth-login-locale-option" data-locale="en">English</button>
+            <button type="button" role="option" class="auth-login-locale-option" data-locale="lv">Latviešu</button>
+            <button type="button" role="option" class="auth-login-locale-option" data-locale="ru">Русский</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="auth-login-inner">
+      <div class="auth-login-hero">
+        <div class="auth-hero-badge" data-i18n="auth.heroBadge">Invoice software for freelancers &amp; small teams</div>
+        <h1 class="auth-login-hero-title"><span data-i18n="auth.heroHeadline1">Send invoices.</span><br><span class="auth-hero-line2" data-i18n="auth.heroHeadline2">Get paid faster.</span></h1>
+        <p class="auth-login-hero-text" data-i18n="auth.heroCopy">Create professional invoices, manage clients and track payments — all in one place. No accounting knowledge needed.</p>
+        <div class="auth-hero-features">
+          <div class="auth-hero-feature">
+            <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>
+            <div>
+              <strong data-i18n="auth.feat1Title">Professional PDF invoices</strong>
+              <span data-i18n="auth.feat1Desc">Create, download and send invoices in minutes</span>
+            </div>
+          </div>
+          <div class="auth-hero-feature">
+            <span class="material-symbols-outlined" aria-hidden="true">groups</span>
+            <div>
+              <strong data-i18n="auth.feat2Title">Clients &amp; services</strong>
+              <span data-i18n="auth.feat2Desc">Save your clients and services for lightning-fast billing</span>
+            </div>
+          </div>
+          <div class="auth-hero-feature">
+            <span class="material-symbols-outlined" aria-hidden="true">payments</span>
+            <div>
+              <strong data-i18n="auth.feat3Title">Payment tracking</strong>
+              <span data-i18n="auth.feat3Desc">See what's outstanding, overdue or already paid</span>
+            </div>
+          </div>
+          <div class="auth-hero-feature">
+            <span class="material-symbols-outlined" aria-hidden="true">translate</span>
+            <div>
+              <strong data-i18n="auth.feat4Title">Multi-language &amp; multi-currency</strong>
+              <span data-i18n="auth.feat4Desc">Invoice in Latvian, English or Russian with EUR support</span>
+            </div>
+          </div>
+        </div>
+        <div class="auth-login-skeletons">
+          <div class="auth-skeleton auth-skeleton-table auth-skeleton-a">
+            <div class="auth-skeleton-table-header">
+              <span class="auth-skeleton-cell"></span>
+              <span class="auth-skeleton-cell"></span>
+              <span class="auth-skeleton-cell auth-skeleton-cell-narrow"></span>
+            </div>
+            <div class="auth-skeleton-table-row"><span class="auth-skeleton-cell"></span><span class="auth-skeleton-cell auth-skeleton-cell-short"></span><span class="auth-skeleton-cell auth-skeleton-cell-narrow"></span></div>
+            <div class="auth-skeleton-table-row"><span class="auth-skeleton-cell"></span><span class="auth-skeleton-cell auth-skeleton-cell-short"></span><span class="auth-skeleton-cell auth-skeleton-cell-narrow"></span></div>
+            <div class="auth-skeleton-table-row"><span class="auth-skeleton-cell"></span><span class="auth-skeleton-cell auth-skeleton-cell-short"></span><span class="auth-skeleton-cell auth-skeleton-cell-narrow"></span></div>
+          </div>
+          <div class="auth-skeleton auth-skeleton-doc auth-skeleton-b">
+            <div class="auth-skeleton-doc-header"></div>
+            <div class="auth-skeleton-bar"></div>
+            <div class="auth-skeleton-bar auth-skeleton-bar-mid"></div>
+            <div class="auth-skeleton-bar auth-skeleton-bar-short"></div>
+          </div>
+        </div>
+      </div>
+      <div class="auth-login-card-wrap">
+        <div class="auth-login-card">
+          <div class="auth-login-header">
+            <h2 class="auth-login-title" data-i18n="auth.cardTitle">Sign in to Qlynton</h2>
+            <p class="auth-login-subtitle" data-i18n="auth.cardSubtitle">Use your Google account to get started or access your invoices.</p>
+          </div>
+          <a href="/auth/google" class="auth-google-btn" id="auth-google-link">
+            <span class="auth-google-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.26c-.806.54-1.836.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/><path d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71 0-.593.102-1.17.282-1.71V5.658H.957C.347 6.883 0 8.2 0 9.5c0 1.3.348 2.617.957 3.842l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 5.168L3.964 7.5C4.672 5.364 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+            </span>
+            <span class="auth-google-label" data-i18n="auth.signInWithGoogle">Sign in with Google</span>
+          </a>
+          <p id="auth-error" class="auth-error hidden" data-i18n="auth.failed">Sign-in failed. Try again.</p>
+
+          <!-- Email / password auth -->
+          <div class="auth-divider"><span data-i18n="auth.orDivider">or</span></div>
+
+          <!-- Login form (default) -->
+          <form class="auth-local-form" id="auth-local-login-form" autocomplete="on" novalidate>
+            <div class="auth-field">
+              <input type="email" id="auth-email" name="email" autocomplete="username" required
+                data-i18n-placeholder="auth.emailPlaceholder" placeholder="Email" inputmode="email" autocapitalize="none" spellcheck="false" />
+            </div>
+            <div class="auth-field">
+              <input type="password" id="auth-password" name="password" autocomplete="current-password" required
+                data-i18n-placeholder="auth.passwordPlaceholder" placeholder="Password" />
+            </div>
+            <p id="auth-local-error" class="auth-local-error hidden"></p>
+            <button type="submit" class="btn btn-primary auth-local-submit-btn" id="auth-local-login-btn" data-i18n="auth.signInEmail">Sign in</button>
+            <div class="auth-local-links">
+              <button type="button" class="auth-text-btn" id="auth-forgot-link" data-i18n="auth.forgotPassword">Forgot password?</button>
+              <button type="button" class="auth-text-btn" id="auth-register-link" data-i18n="auth.createAccount">Create account</button>
+            </div>
+          </form>
+
+          <!-- Register form (hidden) -->
+          <form class="auth-local-form hidden" id="auth-local-register-form" autocomplete="on" novalidate>
+            <p class="auth-register-lead" data-i18n="auth.registerLead">Register with email and password. You can edit your display name anytime; email stays fixed.</p>
+            <div class="auth-field">
+              <input type="email" id="auth-reg-email" name="email" autocomplete="username" required
+                data-i18n-placeholder="auth.emailPlaceholder" placeholder="Email" inputmode="email" autocapitalize="none" spellcheck="false" />
+            </div>
+            <p class="auth-field-hint" data-i18n="auth.registerEmailHint">This email is your login and cannot be changed later.</p>
+            <div class="auth-field">
+              <input type="password" id="auth-reg-password" name="password" autocomplete="new-password" required minlength="8"
+                data-i18n-placeholder="auth.passwordMinHint" placeholder="Password (min 8 chars)" />
+            </div>
+            <div class="auth-field">
+              <input type="text" id="auth-reg-name" name="name" autocomplete="name"
+                data-i18n-placeholder="auth.namePlaceholder" placeholder="Your name" />
+            </div>
+            <p id="auth-reg-error" class="auth-local-error hidden"></p>
+            <button type="submit" class="btn btn-primary auth-local-submit-btn" id="auth-local-register-btn" data-i18n="auth.createAccount">Create account</button>
+            <div class="auth-local-links">
+              <button type="button" class="auth-text-btn" id="auth-back-login-link" data-i18n="auth.backToSignIn">Back to sign in</button>
+            </div>
+          </form>
+
+          <!-- Forgot password form (hidden) -->
+          <form class="auth-local-form hidden" id="auth-local-forgot-form" autocomplete="on" novalidate>
+            <p class="auth-local-form-desc" data-i18n="auth.forgotDesc">Enter your email and we'll send a reset link.</p>
+            <div class="auth-field">
+              <input type="email" id="auth-forgot-email" name="email" autocomplete="email" required
+                data-i18n-placeholder="auth.emailPlaceholder" placeholder="Email" />
+            </div>
+            <p id="auth-forgot-error" class="auth-local-error hidden"></p>
+            <p id="auth-forgot-success" class="auth-local-success hidden"></p>
+            <button type="submit" class="btn btn-primary auth-local-submit-btn" id="auth-local-forgot-btn" data-i18n="auth.sendResetLink">Send reset link</button>
+            <div class="auth-local-links">
+              <button type="button" class="auth-text-btn" id="auth-back-login-from-forgot" data-i18n="auth.backToSignIn">Back to sign in</button>
+            </div>
+          </form>
+
+          <!-- Reset password form (hidden, shown when ?reset=TOKEN is in URL) -->
+          <form class="auth-local-form hidden" id="auth-local-reset-form" autocomplete="on" novalidate>
+            <p class="auth-local-form-desc" data-i18n="auth.resetDesc">Enter your new password.</p>
+            <div class="auth-field">
+              <input type="password" id="auth-reset-password" name="password" autocomplete="new-password" required minlength="8"
+                data-i18n-placeholder="auth.newPasswordPlaceholder" placeholder="New password (min 8 chars)" />
+            </div>
+            <div class="auth-field">
+              <input type="password" id="auth-reset-password-confirm" name="password_confirm" autocomplete="new-password" required minlength="8"
+                data-i18n-placeholder="auth.confirmPasswordPlaceholder" placeholder="Confirm new password" />
+            </div>
+            <p id="auth-reset-error" class="auth-local-error hidden"></p>
+            <p id="auth-reset-success" class="auth-local-success hidden"></p>
+            <button type="submit" class="btn btn-primary auth-local-submit-btn" id="auth-local-reset-btn" data-i18n="auth.setNewPassword">Set new password</button>
+          </form>
+
+          <p class="auth-legal-notice">
+            <span data-i18n="auth.legalNoticePrefix">By signing in, you agree to our</span>
+            <a href="/terms" data-i18n="footer.terms">Terms of Service</a>
+            <span data-i18n="auth.legalNoticeAnd">and</span>
+            <a href="/privacy" data-i18n="footer.privacy">Privacy Policy</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+    <footer class="auth-login-footer">
+      <p class="auth-login-footer-text" data-i18n="footer.tagline">Invoices by Qlynton.</p>
+      <p class="auth-login-footer-copy">&copy; <span id="auth-footer-year"></span> Qlynton</p>
+      <div class="auth-login-footer-links">
+        <a href="/privacy" data-i18n="footer.privacy">Privacy Policy</a>
+        <a href="/terms" data-i18n="footer.terms">Terms of Service</a>
+      </div>
+    </footer>
+  </div>
+  <main class="main hidden" id="main-app">
+    <div id="view-bills" class="view hidden">
+      <div class="view-header">
+        <h1 data-i18n="bills.title">My Invoices</h1>
+      </div>
+      <div class="view-body">
+        <div class="bills-stats-strip" id="bills-stats-strip">
+          <div class="bills-stat-chip bills-stat-chip-outstanding">
+            <span class="bills-stat-label" data-i18n="dashboard.outstanding">Outstanding</span>
+            <span class="bills-stat-value" id="stat-outstanding">—</span>
+          </div>
+          <div class="bills-stat-chip bills-stat-chip-overdue">
+            <span class="bills-stat-label" data-i18n="dashboard.overdue">Overdue</span>
+            <span class="bills-stat-value" id="stat-overdue">—</span>
+          </div>
+          <div class="bills-stat-chip bills-stat-chip-paid">
+            <span class="bills-stat-label" data-i18n="dashboard.paidThisMonth">Paid this month</span>
+            <span class="bills-stat-value" id="stat-paid-month">—</span>
+          </div>
+          <div class="bills-stat-chip bills-stat-chip-draft">
+            <span class="bills-stat-label" data-i18n="dashboard.drafts">Drafts</span>
+            <span class="bills-stat-value" id="stat-drafts">—</span>
+          </div>
+        </div>
+        <button type="button" class="filter-toggle-btn" id="filter-toggle-btn" aria-expanded="false">
+          <span class="material-symbols-outlined">tune</span>
+          <span data-i18n="bills.filtersToggle">Filters</span>
+          <span class="material-symbols-outlined filter-toggle-chevron">expand_more</span>
+        </button>
+        <div class="filters" id="filters-panel">
+          <div class="filter-control-wrap">
+            <input type="text" id="filter-search" class="input filter-search" data-i18n-placeholder="bills.filterSearch" placeholder="Search by number or customer…">
+            <button type="button" class="filter-clear-x" id="filter-clear-search" aria-label="Clear search" tabindex="-1">×</button>
+          </div>
+          <div class="filter-date-row">
+            <div class="filter-date-wrap">
+              <label class="filter-date-label" for="filter-date-from" data-i18n="bills.filterFrom">From</label>
+              <div class="filter-control-wrap">
+                <input type="date" id="filter-date-from" class="input" placeholder="From">
+                <button type="button" class="filter-date-calendar-btn" id="filter-calendar-from" data-i18n-aria-label="bills.pickDate" tabindex="-1"><span class="material-symbols-outlined" aria-hidden="true">calendar_today</span></button>
+                <button type="button" class="filter-clear-x" id="filter-clear-date-from" aria-label="Clear from date" tabindex="-1">×</button>
+              </div>
+            </div>
+            <div class="filter-date-wrap">
+              <label class="filter-date-label" for="filter-date-to" data-i18n="bills.filterTo">To</label>
+              <div class="filter-control-wrap">
+                <input type="date" id="filter-date-to" class="input" placeholder="To">
+                <button type="button" class="filter-date-calendar-btn" id="filter-calendar-to" data-i18n-aria-label="bills.pickDate" tabindex="-1"><span class="material-symbols-outlined" aria-hidden="true">calendar_today</span></button>
+                <button type="button" class="filter-clear-x" id="filter-clear-date-to" aria-label="Clear to date" tabindex="-1">×</button>
+              </div>
+            </div>
+          </div>
+          <div class="filter-control-wrap">
+            <select id="filter-customer" class="input">
+              <option value="" data-i18n-opt="bills.allCustomers">All customers</option>
+            </select>
+            <button type="button" class="filter-clear-x" id="filter-clear-customer" aria-label="Clear customer filter" tabindex="-1">×</button>
+          </div>
+          <div class="filter-control-wrap">
+            <select id="filter-status" class="input">
+              <option value="" data-i18n-opt="bills.allStatuses">All statuses</option>
+              <option value="draft" data-i18n-opt="status.draft">Draft</option>
+              <option value="sent" data-i18n-opt="status.sent">Sent</option>
+              <option value="overdue" data-i18n-opt="status.overdue">Overdue</option>
+              <option value="paid" data-i18n-opt="status.paid">Paid</option>
+            </select>
+            <button type="button" class="filter-clear-x" id="filter-clear-status" aria-label="Clear status filter" tabindex="-1">×</button>
+          </div>
+          <button type="button" class="btn btn-secondary" id="btn-clear-filters" data-i18n="bills.clearFilters">Clear filters</button>
+        </div>
+        <div class="filter-presets-scroll">
+          <div class="filter-presets">
+            <button type="button" class="filter-preset-btn" data-preset="this-month" data-i18n="bills.filterThisMonth">This month</button>
+            <button type="button" class="filter-preset-btn" data-preset="last-month" data-i18n="bills.filterLastMonth">Last month</button>
+            <button type="button" class="filter-preset-btn" data-preset="last-3-months" data-i18n="bills.filterLast3Months">Last 3 months</button>
+            <button type="button" class="filter-preset-btn" data-preset="this-year" data-i18n="bills.filterThisYear">This year</button>
+            <button type="button" class="filter-preset-btn" data-preset="all-time" data-i18n="bills.filterAllTime">All time</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="sortable" data-sort="number" data-label-key="bills.colNumber" data-i18n="bills.colNumber">Number</th>
+                <th class="sortable" data-sort="date" data-label-key="bills.colDate" data-i18n="bills.colDate">Date</th>
+                <th class="sortable" data-sort="customer" data-label-key="bills.colCustomer" data-i18n="bills.colCustomer">Customer</th>
+                <th class="sortable" data-sort="status" data-label-key="bills.colStatus" data-i18n="bills.colStatus">Status</th>
+                <th class="sortable col-total" data-sort="total" data-label-key="bills.colTotal" data-i18n="bills.colTotal">Total</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="bills-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div id="view-settings" class="view hidden">
+      <div class="view-header">
+        <h1 data-i18n="settings.title">Settings</h1>
+      </div>
+      <div class="settings-layout">
+      <aside class="settings-sidebar">
+        <select id="settings-section-select" class="input settings-mobile-section-select" data-i18n-aria-label="settings.mobileNavLabel" aria-label="Settings section">
+          <option value="account" data-i18n-opt="settings.account">Account</option>
+          <option value="companies" data-i18n-opt="settings.companies">My companies</option>
+          <option value="customers" data-i18n-opt="settings.customers">Customers</option>
+          <option value="services" data-i18n-opt="settings.services">Services</option>
+          <option value="drive" data-i18n-opt="settings.driveSection">Google Drive</option>
+          <option value="appearance" data-i18n-opt="settings.appearance">Appearance</option>
+          <option value="data" data-i18n-opt="settings.data">Data</option>
+        </select>
+        <nav class="settings-sidebar-nav" aria-label="Settings sections">
+          <button type="button" class="settings-sidebar-item active" data-section="account"><span class="material-symbols-outlined">person</span><span data-i18n="settings.account">Account</span></button>
+          <button type="button" class="settings-sidebar-item" data-section="companies"><span class="material-symbols-outlined">business</span><span data-i18n="settings.companies">My companies</span></button>
+          <button type="button" class="settings-sidebar-item" data-section="customers"><span class="material-symbols-outlined">groups</span><span data-i18n="settings.customers">Customers</span></button>
+          <button type="button" class="settings-sidebar-item" data-section="services"><span class="material-symbols-outlined">category</span><span data-i18n="settings.services">Services</span></button>
+          <button type="button" class="settings-sidebar-item" data-section="drive"><span class="material-symbols-outlined">cloud</span><span data-i18n="settings.driveSection">Google Drive</span></button>
+          <button type="button" class="settings-sidebar-item" data-section="appearance"><span class="material-symbols-outlined">palette</span><span data-i18n="settings.appearance">Appearance</span></button>
+          <button type="button" class="settings-sidebar-item" data-section="data"><span class="material-symbols-outlined">database</span><span data-i18n="settings.data">Data</span></button>
+        </nav>
+      </aside>
+      <div class="settings-content">
+      <section class="settings-section" data-section="account" id="settings-account-section">
+        <div class="settings-section-header">
+          <h2 data-i18n="settings.account">Account</h2>
+          <p data-i18n="settings.accountSubtitle">Manage your personal information and sign-in details.</p>
+        </div>
+        <div class="settings-card">
+          <div class="settings-account-block">
+            <div class="settings-row">
+              <label for="account-name" data-i18n="settings.accountName">Name</label>
+              <input type="text" id="account-name" class="input" autocomplete="name">
+            </div>
+            <div class="settings-row">
+              <label data-i18n="settings.accountEmail">Email</label>
+              <p id="account-email" class="settings-account-email"></p>
+              <p class="settings-hint" id="account-email-hint-local" data-i18n="account.emailLockedLocal">Used to sign in. Cannot be changed after registration.</p>
+              <p class="settings-hint hidden" id="account-email-hint-google" data-i18n="account.emailLockedGoogle">Linked to your Google account.</p>
+            </div>
+            <div id="account-password-local-wrap" class="hidden settings-row settings-account-password-row">
+              <label data-i18n="account.passwordColumnLabel">Password</label>
+              <div class="settings-account-password-actions">
+                <p class="settings-hint" data-i18n="account.passwordResetLead">A reset link will be sent to your email.</p>
+                <button type="button" class="btn btn-secondary" id="btn-open-password-reset" data-i18n="account.changePassword">Change password</button>
+              </div>
+            </div>
+            <div id="account-password-google-wrap" class="hidden settings-row">
+              <p class="settings-hint" data-i18n="account.passwordGoogleManaged">Sign-in is managed by Google.</p>
+            </div>
+            <div class="settings-row settings-row-action">
+              <button type="button" class="btn btn-primary hidden" id="btn-save-account" data-i18n="common.save">Save</button>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="settings-section hidden" data-section="companies">
+        <div class="settings-section-heading-row">
+          <div class="settings-section-header">
+            <h2 data-i18n="settings.companies">My companies</h2>
+            <p data-i18n="settings.companiesSubtitle">Companies used for invoices and branding.</p>
+          </div>
+          <div id="companies-actions" class="settings-section-header-actions"></div>
+        </div>
+        <div id="companies-root" class="list-block"></div>
+      </section>
+      <section class="settings-section hidden" data-section="customers">
+        <div class="settings-section-heading-row">
+          <div class="settings-section-header">
+            <h2 data-i18n="settings.customers">Customers</h2>
+            <p data-i18n="settings.customersSubtitle">Saved customers appear when you create invoices.</p>
+          </div>
+          <div id="customers-actions" class="settings-section-header-actions"></div>
+        </div>
+        <div id="customers-root" class="list-block"></div>
+      </section>
+      <section class="settings-section hidden" data-section="services">
+        <div class="settings-section-heading-row">
+          <div class="settings-section-header">
+            <h2 data-i18n="settings.services">Services and products</h2>
+            <p data-i18n="settings.servicesSubtitle">Reusable lines for faster invoice entry.</p>
+          </div>
+          <div id="services-actions" class="settings-section-header-actions"></div>
+        </div>
+        <div id="services-root" class="list-block"></div>
+      </section>
+      <section class="settings-section hidden" data-section="drive" id="settings-drive-section">
+        <div class="settings-section-header">
+          <h2 data-i18n="settings.driveSection">Google Drive</h2>
+          <p data-i18n="settings.driveSubtitle">Save PDF copies to your Google Drive.</p>
+        </div>
+        <div class="settings-card">
+        <div class="settings-email-block">
+          <p id="drive-disconnected-lead" class="settings-hint settings-hint-block" data-i18n="settings.driveDisconnectedLead">Connect once to upload PDFs or choose a folder.</p>
+          <div id="drive-disconnected-block">
+            <div class="settings-row settings-row-action">
+              <a href="/auth/google/drive" class="btn btn-secondary" id="btn-connect-drive" data-i18n="settings.driveConnect">Connect Google Drive</a>
+            </div>
+          </div>
+          <div id="drive-connected-block" class="hidden">
+            <div class="settings-row">
+              <label data-i18n="settings.driveConnected">Connected as</label>
+              <p id="drive-connected-email" class="settings-account-email"></p>
+            </div>
+            <div class="settings-row">
+              <label for="setting-drive-root-folder-name" data-i18n="settings.driveRootFolder">Upload folder (optional)</label>
+              <input type="hidden" id="setting-drive-root-folder">
+              <div class="input-with-action">
+                <input type="text" id="setting-drive-root-folder-name" class="input" readonly placeholder="My Drive" data-i18n-placeholder="settings.driveRootFolderPlaceholder">
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-browse-drive-folder" data-i18n="settings.driveBrowse">Browse…</button>
+              </div>
+            </div>
+            <div class="settings-row">
+              <label class="checkbox-label">
+                <input type="checkbox" id="setting-drive-monthly-folders">
+                <span data-i18n="settings.driveMonthlyFolders">Organise into monthly subfolders</span>
+              </label>
+            </div>
+            <div class="settings-row" id="drive-folder-format-row" style="display:none">
+              <label for="setting-drive-folder-format-preset" data-i18n="settings.driveFolderFormat">Folder name format</label>
+              <select id="setting-drive-folder-format-preset" class="input">
+                <option value="YYYY-MM">YYYY-MM</option>
+                <option value="YYYY/MM">YYYY/MM</option>
+                <option value="MM-YYYY">MM-YYYY</option>
+                <option value="MMM-YY">MMM-YY</option>
+                <option value="MMMM YYYY">MMMM YYYY</option>
+                <option value="YYYY-MMMM">YYYY-MMMM</option>
+              </select>
+              <input type="hidden" id="setting-drive-folder-format" value="">
+            </div>
+            <div class="settings-row settings-row-action">
+              <button type="button" class="btn btn-primary" id="btn-save-drive-settings" data-i18n="settings.driveSave">Save settings</button>
+              <button type="button" class="btn btn-danger-outline" id="btn-disconnect-drive" data-i18n="settings.driveDisconnect">Disconnect</button>
+            </div>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="settings-section hidden settings-section-appearance-language" data-section="appearance">
+        <div class="settings-section-header">
+          <h2 data-i18n="settings.appearance">Appearance</h2>
+          <p data-i18n="settings.appearanceSubtitle">Theme and language apply immediately after you change them.</p>
+        </div>
+        <div class="settings-card">
+        <div class="appearance-language-row">
+          <div class="theme-options settings-row">
+            <label for="setting-theme" data-i18n="settings.theme">Theme</label>
+            <select id="setting-theme" class="input">
+              <option value="light" data-i18n-opt="settings.themeLight">Light</option>
+              <option value="dark" data-i18n-opt="settings.themeDark">Dark</option>
+            </select>
+          </div>
+          <div class="language-options">
+            <div class="settings-row">
+              <label for="setting-locale" data-i18n="settings.appLanguage">App language</label>
+              <select id="setting-locale" class="input">
+                <option value="lv">Latviešu</option>
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+              </select>
+            </div>
+            <div class="settings-row">
+              <label for="setting-bills-locale" data-i18n="settings.billsLanguage">Bills language</label>
+              <select id="setting-bills-locale" class="input">
+                <option value="lv">Latviešu</option>
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section class="settings-section hidden" data-section="data">
+        <div class="settings-section-header">
+          <h2 data-i18n="settings.data">Data</h2>
+          <p data-i18n="settings.dataSubtitle">Backup or restore your invoices and settings.</p>
+        </div>
+        <div class="settings-card">
+          <p class="settings-hint settings-hint-block" data-i18n="settings.exportImportLead">Export downloads a JSON file. Import replaces the current account data from a file.</p>
+          <div class="data-actions">
+            <button type="button" class="btn btn-secondary" id="btn-export" data-i18n="settings.exportJson">Export JSON</button>
+            <label class="btn btn-secondary">
+              <span data-i18n="settings.importJson">Import JSON</span>
+              <input type="file" id="input-import" accept=".json" hidden>
+            </label>
+          </div>
+        </div>
+      </section>
+      </div><!-- /.settings-content -->
+      </div><!-- /.settings-layout -->
+    </div>
+    <div id="view-faq" class="view hidden">
+      <div class="view-header">
+        <h1 data-i18n="faq.title">Help</h1>
+      </div>
+      <div class="view-body faq-view-body">
+        <p class="faq-intro" data-i18n="faq.intro">Short answers about invoices, settings, and data.</p>
+        <div class="faq-toolbar">
+          <input type="search" id="faq-search" class="input faq-search-input" data-i18n-placeholder="faq.searchPlaceholder" placeholder="Search questions…" autocomplete="off">
+        </div>
+        <div id="faq-root" class="faq-root"></div>
+        <p id="faq-empty" class="faq-no-results hidden" data-i18n="faq.noResults">No questions match your search.</p>
+      </div>
+    </div>
+  </main>
+  <footer class="app-footer">
+    <p class="app-footer-text" data-i18n="footer.tagline">Invoices by Qlynton.</p>
+    <div class="app-footer-links">
+      <a href="#/faq" data-i18n="footer.help">Help</a>
+      <a href="/privacy" data-i18n="footer.privacy">Privacy Policy</a>
+      <a href="/terms" data-i18n="footer.terms">Terms of Service</a>
+    </div>
+    <p class="app-footer-copy">&copy; <span id="footer-year"></span> Qlynton</p>
+  </footer>
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+  <div id="undo-toast" class="undo-toast hidden" aria-live="polite">
+    <span class="undo-toast-msg"></span><span class="undo-toast-count">5</span>s <button type="button" class="btn btn-secondary undo-toast-undo" data-i18n="undo.undo">Undo</button>
+  </div>
+  <div id="modal-editor-overlay" class="modal-overlay modal-editor-overlay hidden">
+    <div class="modal-box modal-editor-box">
+      <div class="modal-editor-header view-header">
+        <h1 id="editor-title" data-i18n="editor.titleNew">New invoice</h1>
+        <div class="editor-actions">
+          <button type="button" class="btn btn-ghost" id="btn-editor-close" data-i18n="editor.close">Close</button>
+          <button type="button" class="btn btn-primary" id="btn-save-bill" data-i18n="editor.save">Save</button>
+        </div>
+      </div>
+      <div id="bill-editor-root" class="bill-editor"></div>
+    </div>
+  </div>
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div id="modal-box" class="modal-box"></div>
+  </div>
+  <div id="discard-confirm-overlay" class="modal-overlay discard-confirm-overlay hidden">
+    <div class="modal-box discard-confirm-box">
+      <p class="discard-confirm-msg" data-i18n="discard.msg">Changes will not be saved. Close anyway?</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="discard-confirm-cancel" data-i18n="discard.cancel">Cancel</button>
+        <button type="button" class="btn btn-primary btn-danger" id="discard-confirm-discard" data-i18n="discard.discard">Close without saving</button>
+      </div>
+    </div>
+  </div>
+  <div id="modal-password-reset-overlay" class="modal-overlay password-reset-overlay hidden" aria-modal="true" role="dialog" aria-labelledby="password-reset-modal-title">
+    <div class="modal-box password-reset-modal-box">
+      <h2 class="password-reset-modal-title" id="password-reset-modal-title" data-i18n="account.passwordResetTitle">Reset password</h2>
+      <p class="password-reset-modal-body" data-i18n="account.passwordResetBody">We will send a link to set a new password to:</p>
+      <p class="password-reset-modal-email" id="password-reset-modal-email"></p>
+      <p class="settings-hint password-reset-modal-hint client-dev-hint-only hidden" data-i18n="account.passwordResetDevHint">Developer note: without outgoing email, the reset link is logged on the server. Configure SMTP to deliver mail.</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="btn-password-reset-cancel" data-i18n="common.cancel">Cancel</button>
+        <button type="button" class="btn btn-primary" id="btn-password-reset-send" data-i18n="account.passwordResetSend">Send link</button>
+      </div>
+    </div>
+  </div>
+  <!-- Onboarding wizard overlay -->
+  <div id="onb-overlay" class="onb-overlay" hidden aria-modal="true" role="dialog" aria-labelledby="onb-step-title">
+    <div class="onb-card">
+      <div class="onb-header">
+        <div class="onb-logo">Qlynton</div>
+        <div class="onb-dots" id="onb-dots"></div>
+      </div>
+      <div class="onb-content" id="onb-step-content"></div>
+      <div class="onb-footer">
+        <button type="button" class="btn btn-ghost hidden" id="onb-btn-back">
+          <span class="material-symbols-outlined onb-btn-back-icon" aria-hidden="true">arrow_back</span>
+          <span class="onb-btn-back-text" data-i18n="onboarding.back">Back</span>
+        </button>
+        <div class="onb-footer-right">
+          <button type="button" class="btn btn-ghost hidden" id="onb-btn-skip" data-i18n="onboarding.skipStep">Skip this step</button>
+          <button type="button" class="btn btn-primary hidden" id="onb-btn-dashboard" data-i18n="onboarding.goToDashboard">Go to Dashboard</button>
+          <button type="button" class="btn btn-primary hidden" id="onb-btn-next">Save &amp; Continue</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav class="bottom-nav" id="bottom-nav">
+    <a href="#/" class="bottom-nav-item" data-view="bills">
+      <span class="material-symbols-outlined" aria-hidden="true">receipt_long</span>
+      <span data-i18n="nav.bills">Invoices</span>
+    </a>
+    <a href="#/new" class="bottom-nav-fab" aria-label="Create new invoice">
+      <span class="bottom-nav-fab-btn">
+        <span class="material-symbols-outlined" aria-hidden="true">add</span>
+      </span>
+    </a>
+    <button type="button" class="bottom-nav-item" id="nav-bottom-add-customer">
+      <span class="material-symbols-outlined" aria-hidden="true">person_add</span>
+      <span data-i18n="nav.addCustomer">Customer</span>
+    </button>
+  </nav>
+  <script src="js/i18n.js"></script>
+  <script src="js/faq-data.js"></script>
+  <script src="js/faq.js"></script>
+  <script src="js/banks.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/views.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/bills-list.js"></script>
+  <script src="js/bill-editor.js"></script>
+  <script src="js/pdf-font.js"></script>
+  <script src="js/bills-locale.js"></script>
+  <script src="js/pdf.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script src="js/auth-login-particles.js"></script>
+  <script src="js/auth-local.js"></script>
+  <script src="js/onboarding.js"></script>
+  <script src="js/app.js"></script>
+  <script src="https://apis.google.com/js/api.js" async defer></script>
+</body>
+</html>

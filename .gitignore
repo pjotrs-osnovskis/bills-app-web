@@ -1,0 +1,12 @@
+node_modules/
+data/*
+!data/.gitkeep
+public/uploads/
+.env
+.env.*
+!.env.example
+*service-account*.json
+*.log
+.DS_Store
+test-export.json
+dist/
