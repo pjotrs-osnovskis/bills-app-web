@@ -44,6 +44,9 @@ jobs:
           region: ${{ vars.GCP_REGION || 'europe-west1' }}
           source: .
           flags: --allow-unauthenticated --min-instances=0 --max-instances=1 --cpu=1 --memory=512Mi
+          env_vars: |
+            NODE_ENV=production
+            SESSION_SECRET=${{ secrets.SESSION_SECRET }}
 
       - name: Missing secret notice
         if: steps.precheck.outputs.ready != 'true'
