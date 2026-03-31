@@ -169,6 +169,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     user = null;
   }
 
+  const assistantFabEl = document.getElementById('assistant-fab');
+  const assistantPanelEl = document.getElementById('assistant-panel');
+  const assistantCloseEl = document.getElementById('assistant-panel-close');
+  const assistantFormEl = document.getElementById('assistant-form');
+  const assistantInputEl = document.getElementById('assistant-input');
+  const assistantMessagesEl = document.getElementById('assistant-messages');
+
+  function appendAssistantMessage(kind, text) {
+    if (!assistantMessagesEl) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'assistant-msg ' + (kind === 'user' ? 'assistant-msg-user' : 'assistant-msg-bot');
+    const body = document.createElement('div');
+    body.className = 'assistant-msg-body';
+    body.textContent = text;
+    wrap.appendChild(body);
+    assistantMessagesEl.appendChild(wrap);
+    assistantMessagesEl.scrollTop = assistantMessagesEl.scrollHeight;
+  }
+
+  function openAssistant() {
+    if (!assistantPanelEl) return;
+    assistantPanelEl.classList.remove('hidden');
+    if (assistantInputEl) assistantInputEl.focus();
+  }
+
+  function closeAssistant() {
+    if (!assistantPanelEl) return;
+    assistantPanelEl.classList.add('hidden');
+  }
+
   if (!user) {
     try {
       const savedLocale = localStorage.getItem('bills-app-locale');
@@ -235,6 +265,62 @@ document.addEventListener('DOMContentLoaded', async () => {
   const navUserAccountEl = document.getElementById('nav-user-account');
   if (navUserAccountEl) navUserAccountEl.textContent = user.name || user.email || user.id;
   if (authErrorEl) authErrorEl.classList.add('hidden');
+
+  if (user && assistantFabEl) {
+    assistantFabEl.classList.remove('hidden');
+  }
+
+  if (assistantFabEl) {
+    assistantFabEl.addEventListener('click', function () { openAssistant(); });
+  }
+
+  if (assistantCloseEl) {
+    assistantCloseEl.addEventListener('click', function () { closeAssistant(); });
+  }
+
+  if (assistantFormEl && assistantInputEl) {
+    assistantFormEl.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const text = assistantInputEl.value.trim();
+      if (!text) return;
+      appendAssistantMessage('user', text);
+      assistantInputEl.value = '';
+      appendAssistantMessage('bot', 'Thinking…');
+
+      try {
+        const res = await fetch('/api/assistant/command', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', ...csrfHeaders() },
+          body: JSON.stringify({ text }),
+          credentials: 'include'
+        });
+        const data = await res.json().catch(function () { return {}; });
+        const last = assistantMessagesEl.lastElementChild;
+        if (last && last.textContent === 'Thinking…') {
+          assistantMessagesEl.removeChild(last);
+        }
+        if (!res.ok) {
+          const msg = (data && data.error) ? data.error : (res.statusText || 'Request failed');
+          appendAssistantMessage('bot', msg);
+          return;
+        }
+        const summary = data && data.summary ? data.summary : 'Done.';
+        appendAssistantMessage('bot', summary);
+      } catch (err) {
+        const last = assistantMessagesEl && assistantMessagesEl.lastElementChild;
+        if (last && last.textContent === 'Thinking…') {
+          assistantMessagesEl.removeChild(last);
+        }
+        appendAssistantMessage('bot', (err && err.message) ? err.message : 'Could not reach assistant.');
+      }
+    });
+  }
+
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape' && assistantPanelEl && !assistantPanelEl.classList.contains('hidden')) {
+      closeAssistant();
+    }
+  });
 
   // Theme toggle
   const navThemeBtn = document.getElementById('nav-theme-btn');

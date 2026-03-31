@@ -623,6 +623,43 @@
         </div>
       </div>
     </div>
+
+  <div id="assistant-fab" class="assistant-fab hidden">
+    <button type="button" class="assistant-fab-btn">
+      <span class="assistant-fab-icon">✧</span>
+      <span class="assistant-fab-label">Ask Qlynton</span>
+    </button>
+  </div>
+
+  <div id="assistant-panel" class="assistant-panel hidden" aria-label="Qlynton assistant" role="dialog">
+    <div class="assistant-panel-header">
+      <div>
+        <div class="assistant-panel-title">Qlynton assistant</div>
+        <div class="assistant-panel-subtitle">Helps with invoices and customers</div>
+      </div>
+      <button id="assistant-panel-close" type="button" class="assistant-panel-close" aria-label="Close assistant">×</button>
+    </div>
+
+    <div id="assistant-messages" class="assistant-messages">
+      <div class="assistant-msg assistant-msg-bot">
+        <div class="assistant-msg-body">
+          I can help with invoices, customers and simple changes. Try:
+          <span class="assistant-example">“Create an invoice for ACME for 3 hours at 70 EUR with 10 EUR discount.”</span>
+        </div>
+      </div>
+    </div>
+
+    <form id="assistant-form" class="assistant-form" autocomplete="off">
+      <input
+        id="assistant-input"
+        class="assistant-input input"
+        type="text"
+        maxlength="400"
+        placeholder="Describe what you want to do…"
+      />
+      <button type="submit" class="assistant-send-btn btn btn-primary">Send</button>
+    </form>
+  </div>
   </div>
 
   <nav class="bottom-nav" id="bottom-nav">
