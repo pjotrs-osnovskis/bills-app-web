@@ -47,6 +47,10 @@ jobs:
           env_vars: |
             NODE_ENV=production
             SESSION_SECRET=${{ secrets.SESSION_SECRET }}
+            APP_BASE_URL=${{ vars.APP_BASE_URL }}
+            GOOGLE_CALLBACK_URL=${{ vars.APP_BASE_URL }}/auth/google/callback
+            GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+            GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
 
       - name: Missing secret notice
         if: steps.precheck.outputs.ready != 'true'
