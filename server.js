@@ -20,6 +20,7 @@ function getStore() {
 const app = express();
 const PORT = process.env.PORT || 3000;
 const UPLOADS_DIR = process.env.BILLS_APP_UPLOADS_DIR || path.join(__dirname, 'public', 'uploads');
+app.set('trust proxy', 1);
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
@@ -94,7 +95,8 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: sessionStore,
-  cookie: { secure: process.env.NODE_ENV === 'production', httpOnly: true, maxAge: SESSION_TTL_MS }
+  proxy: true,
+  cookie: { secure: 'auto', sameSite: 'lax', httpOnly: true, maxAge: SESSION_TTL_MS }
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -104,22 +106,22 @@ app.use((req, res, next) => {
 });
 
 app.get('/auth/me', (req, res) => {
-  if (req.isAuthenticated()) {
-    const sendResponse = () => res.json({
-      user: req.user,
-      csrfToken: req.session.csrfToken,
-      showClientDevHints: clientDevHintsAllowed()
-    });
-    if (!req.session.csrfToken) {
-      req.session.csrfToken = require('crypto').randomBytes(32).toString('hex');
-      return req.session.save((err) => {
-        if (err) console.error('Session save error in /auth/me:', err);
-        sendResponse();
-      });
-    }
-    return sendResponse();
+  if (!req.isAuthenticated()) {
+    return res.json({ user: null, csrfToken: null, showClientDevHints: false });
   }
-  return res.status(401).json({ error: 'Not authenticated' });
+  const sendResponse = () => res.json({
+    user: req.user,
+    csrfToken: req.session.csrfToken,
+    showClientDevHints: clientDevHintsAllowed()
+  });
+  if (!req.session.csrfToken) {
+    req.session.csrfToken = require('crypto').randomBytes(32).toString('hex');
+    return req.session.save((err) => {
+      if (err) console.error('Session save error in /auth/me:', err);
+      sendResponse();
+    });
+  }
+  return sendResponse();
 });
 
 if (GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET) {

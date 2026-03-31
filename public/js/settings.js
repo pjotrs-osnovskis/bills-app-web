@@ -1292,16 +1292,25 @@ function initDriveSettings() {
     });
   }
 
-  api.getDriveStatus().then((status) => {
-    if (status) {
-      settingsData = {
-        ...settingsData,
-        driveRootFolderName: status.rootFolderName || '',
-        driveFolderFormat: status.folderFormat || ''
-      };
+  api.getAuth().then((user) => {
+    if (!user) {
+      syncDriveSettings(null);
+      return null;
     }
-    syncDriveSettings(status);
-  }).catch(() => {});
+    return api.getDriveStatus().then((status) => {
+      if (status) {
+        settingsData = {
+          ...settingsData,
+          driveRootFolderName: status.rootFolderName || '',
+          driveFolderFormat: status.folderFormat || ''
+        };
+      }
+      syncDriveSettings(status);
+      return null;
+    });
+  }).catch(() => {
+    syncDriveSettings(null);
+  });
 }
 
 function initLanguageSettings() {
